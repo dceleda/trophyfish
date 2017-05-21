@@ -16,7 +16,7 @@ namespace TrophyFish.Model
         public string Avatar { get; set; }
 
         [Required]
-        public int StatusID { get; set; }
+        public byte StatusID { get; set; }
 
         [Required]
         public DateTime CreatedDate { get; set; }

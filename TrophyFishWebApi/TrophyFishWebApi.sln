@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrophyFishApi", "TrophyFish
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "TrophyFishDatabase", "TrophyFishDatabase\TrophyFishDatabase.sqlproj", "{96B16FD1-4FC1-4A72-BB54-35BAEE75D481}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrophyFishModel", "TrophyFishModel\TrophyFishModel.csproj", "{0974D756-0C99-493F-899C-ECD1FF0ACAB5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrophyFishModel", "TrophyFishModel\TrophyFishModel.csproj", "{25AF8E04-EDA6-46B3-AE77-C37CE7DC406D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +25,10 @@ Global
 		{96B16FD1-4FC1-4A72-BB54-35BAEE75D481}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96B16FD1-4FC1-4A72-BB54-35BAEE75D481}.Release|Any CPU.Build.0 = Release|Any CPU
 		{96B16FD1-4FC1-4A72-BB54-35BAEE75D481}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{0974D756-0C99-493F-899C-ECD1FF0ACAB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0974D756-0C99-493F-899C-ECD1FF0ACAB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0974D756-0C99-493F-899C-ECD1FF0ACAB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0974D756-0C99-493F-899C-ECD1FF0ACAB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25AF8E04-EDA6-46B3-AE77-C37CE7DC406D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25AF8E04-EDA6-46B3-AE77-C37CE7DC406D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25AF8E04-EDA6-46B3-AE77-C37CE7DC406D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25AF8E04-EDA6-46B3-AE77-C37CE7DC406D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
