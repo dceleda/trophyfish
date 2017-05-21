@@ -14,7 +14,7 @@ using NLog.Extensions.Logging;
 using NLog.Web;
 using Microsoft.AspNetCore.Http;
 
-namespace TrophyFishApi
+namespace TrophyFish.Api
 {
     public class Startup
     {

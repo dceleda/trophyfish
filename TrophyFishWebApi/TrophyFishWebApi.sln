@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrophyFishApi", "TrophyFishApi\TrophyFishApi.csproj", "{49E75491-E61E-4ED5-89FA-0CD4D751BF72}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "TrophyFishDatabase", "TrophyFishDatabase\TrophyFishDatabase.sqlproj", "{96B16FD1-4FC1-4A72-BB54-35BAEE75D481}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrophyFishModel", "TrophyFishModel\TrophyFishModel.csproj", "{0974D756-0C99-493F-899C-ECD1FF0ACAB5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,16 @@ Global
 		{49E75491-E61E-4ED5-89FA-0CD4D751BF72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49E75491-E61E-4ED5-89FA-0CD4D751BF72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49E75491-E61E-4ED5-89FA-0CD4D751BF72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96B16FD1-4FC1-4A72-BB54-35BAEE75D481}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96B16FD1-4FC1-4A72-BB54-35BAEE75D481}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96B16FD1-4FC1-4A72-BB54-35BAEE75D481}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{96B16FD1-4FC1-4A72-BB54-35BAEE75D481}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96B16FD1-4FC1-4A72-BB54-35BAEE75D481}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96B16FD1-4FC1-4A72-BB54-35BAEE75D481}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{0974D756-0C99-493F-899C-ECD1FF0ACAB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0974D756-0C99-493F-899C-ECD1FF0ACAB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0974D756-0C99-493F-899C-ECD1FF0ACAB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0974D756-0C99-493F-899C-ECD1FF0ACAB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

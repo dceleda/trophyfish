@@ -1,0 +1,7 @@
+﻿INSERT INTO [dbo].[Method] ([ID], [Name]) VALUES (1, N'Grunt-feeder')
+INSERT INTO [dbo].[Method] ([ID], [Name]) VALUES (2, N'Spinning')
+INSERT INTO [dbo].[Method] ([ID], [Name]) VALUES (3, N'Spławik')
+INSERT INTO [dbo].[Method] ([ID], [Name]) VALUES (4, N'Sztuczna mucha')
+INSERT INTO [dbo].[Method] ([ID], [Name]) VALUES (5, N'Trolling')
+INSERT INTO [dbo].[Method] ([ID], [Name]) VALUES (6, N'Drop Shot')
+INSERT INTO [dbo].[Method] ([ID], [Name]) VALUES (7, N'Vertical')

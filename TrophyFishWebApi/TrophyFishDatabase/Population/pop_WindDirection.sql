@@ -1,0 +1,8 @@
+﻿INSERT INTO [dbo].[WindDirection] ([ID], [Name]) VALUES (1, N'S')
+INSERT INTO [dbo].[WindDirection] ([ID], [Name]) VALUES (2, N'SW')
+INSERT INTO [dbo].[WindDirection] ([ID], [Name]) VALUES (3, N'W')
+INSERT INTO [dbo].[WindDirection] ([ID], [Name]) VALUES (4, N'NW')
+INSERT INTO [dbo].[WindDirection] ([ID], [Name]) VALUES (5, N'N')
+INSERT INTO [dbo].[WindDirection] ([ID], [Name]) VALUES (6, N'NE')
+INSERT INTO [dbo].[WindDirection] ([ID], [Name]) VALUES (7, N'E')
+INSERT INTO [dbo].[WindDirection] ([ID], [Name]) VALUES (8, N'SE')
