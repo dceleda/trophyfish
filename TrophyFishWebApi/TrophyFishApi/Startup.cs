@@ -97,6 +97,7 @@ namespace TrophyFish.Api
 
                 // Enable the token endpoint (required to use the password flow).
                 options.EnableTokenEndpoint("/connect/token");
+                options.EnableLogoutEndpoint("/connect/logoff");
 
                 // Allow client applications to use the grant_type=password flow.
                 options.AllowPasswordFlow();

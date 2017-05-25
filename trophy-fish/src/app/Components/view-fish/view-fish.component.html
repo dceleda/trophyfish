@@ -1,0 +1,12 @@
+<div *ngIf="fish">
+    <div class="item-container">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h3>{{fish.Id}}</h3>
+                <p>{{fish.Length}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="button" class="btn btn-primary" value="Save" (click)="onInsert()" />

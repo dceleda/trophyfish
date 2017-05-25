@@ -43,8 +43,10 @@ export class AuthService {
         var url = "http://localhost:21495/connect/logoff";
 
 
-        this.http.post(url, null, this.getRequestOptions())
-            .map(response => response.json())
+        this.http.post(url, null,  new RequestOptions({
+                headers: new Headers({
+                    "Content-Type": "application/x-www-form-urlencoded"
+                })}))
             .catch(this.handleError)
             .subscribe();
 

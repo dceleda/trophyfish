@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
 using TrophyFish.Model;
+using OpenIddict.Models;
+using System.Threading;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,13 +26,16 @@ namespace TrophyFish.Api.Controllers
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        OpenIddictTokenManager<OpenIddictToken> _tokenManager;
 
         public AuthorizationController(
             SignInManager<ApplicationUser> signInManager,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            OpenIddictTokenManager<OpenIddictToken> tokenManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _tokenManager = tokenManager;
         }
 
         [HttpPost("~/connect/token"), Produces("application/json")]
@@ -148,12 +153,15 @@ namespace TrophyFish.Api.Controllers
         }
 
         [HttpPost("~/connect/logoff"), Produces("application/json")]
-        public IActionResult Logoff(OpenIdConnectRequest request)
+        public async Task<IActionResult> Logoff(OpenIdConnectRequest request)
         {
-            
 
-                return SignOut(OpenIdConnectServerDefaults.AuthenticationScheme);
+            foreach (var token in await _tokenManager.FindBySubjectAsync(User.FindFirst(OpenIdConnectConstants.Claims.Subject).Value, CancellationToken.None))
+            {
+                await _tokenManager.RevokeAsync(token, CancellationToken.None);
+            }
 
+            return SignOut(OpenIdConnectServerDefaults.AuthenticationScheme);
         }
 
         private async Task<AuthenticationTicket> CreateTicketAsync(

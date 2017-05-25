@@ -13,10 +13,14 @@ import { AddFishComponent } from './Components/add-fish/add-fish.component';
 import { LoginComponent } from './Components/login/login.component';
 import { PageNotFoundComponent } from './Components/page-not-found/page-not-found.component';
 import { HomePageComponent } from './Components/home-page/home-page.component';
+import { ViewFishComponent } from './Components/view-fish/view-fish.component';
 
 import { AppRouting } from "./app.routing";
 import { AuthHttp } from "./auth.http";
+
 import { AuthService } from "./Services/auth.service";
+import { FishService } from "./Services/fish.service";
+
 
 @NgModule({
   declarations: [
@@ -25,7 +29,8 @@ import { AuthService } from "./Services/auth.service";
     AddFishComponent,
     LoginComponent,
     PageNotFoundComponent,
-    HomePageComponent
+    HomePageComponent,
+    ViewFishComponent
   ],
   imports: [
     BsDropdownModule.forRoot(),
@@ -36,7 +41,7 @@ import { AuthService } from "./Services/auth.service";
     AppRouting,
     ReactiveFormsModule
   ],
-  providers: [AuthHttp, AuthService],
+  providers: [AuthHttp, AuthService, FishService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
