@@ -43,6 +43,8 @@ namespace TrophyFish.Api
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            services.AddCors();
+
             // Add framework services.
             services.AddMvc();
 
@@ -98,12 +100,10 @@ namespace TrophyFish.Api
 
                 // Allow client applications to use the grant_type=password flow.
                 options.AllowPasswordFlow();
-
                 options.AllowRefreshTokenFlow();
 
                 options.SetAccessTokenLifetime(new TimeSpan(0, 2, 0));
                 options.SetRefreshTokenLifetime(new TimeSpan(0, 10, 0));
-                //options.sli
 
                 // During development, you can disable the HTTPS requirement.
                 options.DisableHttpsRequirement();
@@ -113,6 +113,13 @@ namespace TrophyFish.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UseCors(builder =>
+            {
+                builder.WithOrigins("http://localhost:4200");
+                builder.AllowAnyHeader();
+                builder.AllowAnyMethod();
+            });
+
             app.UseIdentity();
 
             app.UseOAuthValidation();

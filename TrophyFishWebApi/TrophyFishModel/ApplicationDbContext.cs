@@ -9,6 +9,8 @@ namespace TrophyFish.Model
 
         public DbSet<Fish> Fishes { get; set; }
 
+        public DbSet<UserStatusDict> UserStatuses { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -21,6 +23,8 @@ namespace TrophyFish.Model
             modelBuilder.Entity<Fish>().Property(f => f.ID).ValueGeneratedOnAdd();
             modelBuilder.Entity<Fish>().HasOne(f => f.User).WithMany(u => u.Fishes);
             modelBuilder.Entity<Fish>().HasOne(f => f.Specie);
+
+            modelBuilder.Entity<UserStatusDict>().ToTable("UserStatusDict");
         }
     }
 }

@@ -147,6 +147,15 @@ namespace TrophyFish.Api.Controllers
             });
         }
 
+        [HttpPost("~/connect/logoff"), Produces("application/json")]
+        public IActionResult Logoff(OpenIdConnectRequest request)
+        {
+            
+
+                return SignOut(OpenIdConnectServerDefaults.AuthenticationScheme);
+
+        }
+
         private async Task<AuthenticationTicket> CreateTicketAsync(
            OpenIdConnectRequest request, ApplicationUser user,
            AuthenticationProperties properties = null)

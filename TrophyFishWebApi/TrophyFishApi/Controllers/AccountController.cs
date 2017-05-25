@@ -40,15 +40,28 @@ namespace TrophyFish.Api.Controllers
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.UserName };
                 user.StatusID = 1;
 
+                //TODO: remove that 
+                if(!_applicationDbContext.UserStatuses.Any(s => s.ID == 1))
+                {
+                    UserStatusDict status = new UserStatusDict { ID = 1, Name = "Test Status" };
+                    _applicationDbContext.UserStatuses.Add(status);
 
-                //await _roleManager.CreateAsync(new IdentityRole { Name = "TestRole" });
-                
-
-                //var role = _roleManager.Roles.Where(r => r.Name == "TestRole").FirstOrDefault();
-                //user.Roles.Add(new IdentityUserRole<string> { UserId})
+                    _applicationDbContext.SaveChanges();
+                }
 
                 var result = await _userManager.CreateAsync(user, model.Password);
-                await _userManager.AddToRoleAsync(user, "TestRole");
+
+                //TODO: remove that
+                if (model.IsAdmin)
+                {
+                    if (!_roleManager.Roles.Any(r => r.Name == "TestRole"))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole { Name = "TestRole" });
+                    }
+
+                    await _userManager.AddToRoleAsync(user, "TestRole");
+                }
+
                 if (result.Succeeded)
                 {
                     return Ok();
