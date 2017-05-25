@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
+using AspNet.Security.OpenIdConnect.Extensions;
+using AspNet.Security.OpenIdConnect.Primitives;
 
 namespace TrophyFishApi.Controllers
 {
@@ -15,6 +18,28 @@ namespace TrophyFishApi.Controllers
         public ValuesController(ILogger<ValuesController> logger)
         {
             _logger = logger;
+        }
+
+        [Authorize]
+        [HttpGet("GetTest")]
+        public IActionResult GetMessage()
+        {
+            return Json(new
+            {
+                Subject = User.GetClaim(OpenIdConnectConstants.Claims.Subject),
+                Name = User.Identity.Name
+            });
+        }
+
+        [Authorize(Roles = "TestRole")]
+        [HttpGet("GetTestRole")]
+        public IActionResult GetMessageWithRole()
+        {
+            return Json(new
+            {
+                Subject = User.GetClaim(OpenIdConnectConstants.Claims.Subject),
+                Name = User.Identity.Name
+            });
         }
 
         // GET api/values

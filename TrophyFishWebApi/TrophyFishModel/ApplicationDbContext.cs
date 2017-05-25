@@ -15,6 +15,7 @@ namespace TrophyFish.Model
 
             modelBuilder.Entity<ApplicationUser>().ToTable("Users");
             modelBuilder.Entity<ApplicationUser>().HasMany(u => u.Fishes).WithOne(f => f.User);
+            modelBuilder.Entity<ApplicationUser>().HasOne(u => u.Status);
 
             modelBuilder.Entity<Fish>().ToTable("Fish");
             modelBuilder.Entity<Fish>().Property(f => f.ID).ValueGeneratedOnAdd();

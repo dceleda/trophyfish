@@ -15,6 +15,7 @@ using NLog.Web;
 using Microsoft.AspNetCore.Http;
 using TrophyFish.Model;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using AspNet.Security.OpenIdConnect.Primitives;
 
 namespace TrophyFish.Api
 {
@@ -65,6 +66,16 @@ namespace TrophyFish.Api
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
+            // Configure Identity to use the same JWT claims as OpenIddict instead
+            // of the legacy WS-Federation claims it uses by default (ClaimTypes),
+            // which saves you from doing the mapping in your authorization controller.
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.ClaimsIdentity.UserNameClaimType = OpenIdConnectConstants.Claims.Name;
+                options.ClaimsIdentity.UserIdClaimType = OpenIdConnectConstants.Claims.Subject;
+                options.ClaimsIdentity.RoleClaimType = OpenIdConnectConstants.Claims.Role;
+            });
+
             // Register the OpenIddict services.
             // Note: use the generic overload if you need
             // to replace the default OpenIddict entities.
@@ -78,11 +89,21 @@ namespace TrophyFish.Api
                 // bind OpenIdConnectRequest or OpenIdConnectResponse parameters.
                 options.AddMvcBinders();
 
+                //options.UseJsonWebTokens();
+
+                //options.AddSigningKey
+
                 // Enable the token endpoint (required to use the password flow).
                 options.EnableTokenEndpoint("/connect/token");
 
                 // Allow client applications to use the grant_type=password flow.
                 options.AllowPasswordFlow();
+
+                options.AllowRefreshTokenFlow();
+
+                options.SetAccessTokenLifetime(new TimeSpan(0, 2, 0));
+                options.SetRefreshTokenLifetime(new TimeSpan(0, 10, 0));
+                //options.sli
 
                 // During development, you can disable the HTTPS requirement.
                 options.DisableHttpsRequirement();

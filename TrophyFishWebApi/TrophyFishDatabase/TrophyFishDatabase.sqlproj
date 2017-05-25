@@ -64,18 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Fish.sql" />
-    <Build Include="Tables\Specie.sql" />
-    <Build Include="Tables\WindDirection.sql" />
-    <Build Include="Tables\PressureChange.sql" />
-    <Build Include="Tables\WaterLevel.sql" />
-    <Build Include="Tables\Clouds.sql" />
-    <Build Include="Tables\FisheryType.sql" />
-    <Build Include="Tables\Country.sql" />
-    <Build Include="Tables\Precipitation.sql" />
-    <Build Include="Tables\FishStatus.sql" />
-    <Build Include="Tables\Angler.sql" />
-    <Build Include="Tables\Method.sql" />
-    <Build Include="Tables\LureBait.sql" />
     <None Include="Population\pop_Clouds.sql" />
     <None Include="Population\pop_Country.sql" />
     <None Include="Population\pop_FisheryType.sql" />
@@ -85,6 +73,30 @@
     <None Include="Population\pop_Specie.sql" />
     <None Include="Population\pop_WaterLevel.sql" />
     <None Include="Population\pop_WindDirection.sql" />
+    <Build Include="Tables\WindDirectionDict.sql" />
+    <Build Include="Tables\WaterLevelDict.sql" />
+    <Build Include="Tables\UserStatusDict.sql" />
+    <Build Include="Tables\Users.sql" />
+    <Build Include="Tables\SpecieDict.sql" />
+    <Build Include="Tables\PressureChangeDict.sql" />
+    <Build Include="Tables\PrecipitationDict.sql" />
+    <Build Include="Tables\OpenIddictTokens.sql" />
+    <Build Include="Tables\OpenIddictScopes.sql" />
+    <Build Include="Tables\OpenIddictAuthorizations.sql" />
+    <Build Include="Tables\OpenIddictApplications.sql" />
+    <Build Include="Tables\MethodDict.sql" />
+    <Build Include="Tables\LureBaitDict.sql" />
+    <Build Include="Tables\FishStatusDict.sql" />
+    <Build Include="Tables\FisheryTypeDict.sql" />
+    <Build Include="Tables\CountryDict.sql" />
+    <Build Include="Tables\CloudDict.sql" />
+    <Build Include="Tables\AspNetUserTokens.sql" />
+    <Build Include="Tables\AspNetUserRoles.sql" />
+    <Build Include="Tables\AspNetUserLogins.sql" />
+    <Build Include="Tables\AspNetUserClaims.sql" />
+    <Build Include="Tables\AspNetRoles.sql" />
+    <Build Include="Tables\AspNetRoleClaims.sql" />
+    <Build Include="Tables\__EFMigrationsHistory.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="TrophyFishDatabase.publish.xml" />
