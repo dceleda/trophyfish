@@ -9,8 +9,6 @@ import { environment } from '../../environments/environment';
 @Injectable()
 export class FishService {
 
-  authKey = "auth";
-
   private baseUrl = environment.apiURL + "/api/fish/";
 
   constructor(private http: AuthHttp) { }
@@ -43,10 +41,10 @@ export class FishService {
   // Persist auth into localStorage or removes it if a NULL argument is given
   setAuth(auth: any): boolean {
     if (auth) {
-      localStorage.setItem(this.authKey, JSON.stringify(auth));
+      localStorage.setItem(environment.authKey, JSON.stringify(auth));
     }
     else {
-      localStorage.removeItem(this.authKey);
+      localStorage.removeItem(environment.authKey);
     }
     return true;
   }

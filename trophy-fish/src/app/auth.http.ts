@@ -47,10 +47,21 @@ export class AuthHttp {
         }
     }
 
+    // Persist auth into localStorage or removes it if a NULL argument is given
+    public setAuth(auth: any): boolean {
+        if (auth) {
+            localStorage.setItem(environment.authKey, JSON.stringify(auth));
+        }
+        else {
+            localStorage.removeItem(environment.authKey);
+        }
+        return true;
+    }
+
     private handleError() {
         return (response: Response) => {
             if (response.status === 401) {
-                // console.log("401 !!!");
+                this.setAuth(null);
                 this.router.navigate(['login']);
             }
 

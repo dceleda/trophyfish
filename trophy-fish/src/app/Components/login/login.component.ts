@@ -35,8 +35,6 @@ export class LoginComponent {
             .subscribe((data) => {
                 // login successful
                 this.loginError = false;
-                var auth = this.authService.getAuth();
-                alert("Our Token is: " + auth.access_token);
                 this.router.navigate([""]);
             },
             (err) => {

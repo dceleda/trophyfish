@@ -8,7 +8,6 @@ import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AuthService {
-    authKey = "auth";
 
     constructor(private http: AuthHttp) {
     }
@@ -21,10 +20,10 @@ export class AuthService {
             password: password,
             grant_type: "password",
             // space-separated list of scopes for which the token is issued
-            scope: "offline_access"
+            scope: "offline_access openid roles"
         };
 
-        return this.http.post(
+        var result = this.http.post(
             url,
             this.toUrlEncodedString(data),
             new RequestOptions({
@@ -36,23 +35,28 @@ export class AuthService {
                 var auth = response.json();
                 console.log("The following auth JSON object has been received:");
                 console.log(auth);
-                this.setAuth(auth);
+                this.http.setAuth(auth);
                 return auth;
             });
+
+        this.delayRefresh();
+
+        return result;
     }
 
     logout(): boolean {
         var url = environment.apiURL + "/connect/logoff";
 
 
-        this.http.post(url, null,  new RequestOptions({
-                headers: new Headers({
-                    "Content-Type": "application/x-www-form-urlencoded"
-                })}))
+        this.http.post(url, null, new RequestOptions({
+            headers: new Headers({
+                "Content-Type": "application/x-www-form-urlencoded"
+            })
+        }))
             .catch(err => { return this.handleError(err) })
             .subscribe();
 
-        this.setAuth(null);
+        this.http.setAuth(null);
 
         return true;
     }
@@ -70,20 +74,11 @@ export class AuthService {
         return body;
     }
 
-    // Persist auth into localStorage or removes it if a NULL argument is given
-    setAuth(auth: any): boolean {
-        if (auth) {
-            localStorage.setItem(this.authKey, JSON.stringify(auth));
-        }
-        else {
-            localStorage.removeItem(this.authKey);
-        }
-        return true;
-    }
+
 
     // Retrieves the auth JSON object (or NULL if none)
     getAuth(): any {
-        var i = localStorage.getItem(this.authKey);
+        var i = localStorage.getItem(environment.authKey);
         if (i) {
             return JSON.parse(i);
         }
@@ -94,7 +89,7 @@ export class AuthService {
 
     // Returns TRUE if the user is logged in, FALSE otherwise.
     isLoggedIn(): boolean {
-        return localStorage.getItem(this.authKey) != null;
+        return localStorage.getItem(environment.authKey) != null;
     }
 
     private getRequestOptions() {
@@ -103,6 +98,16 @@ export class AuthService {
                 "Content-Type": "application/json"
             })
         });
+    }
+
+    private delayRefresh() {
+        let test = Observable.timer(7000);
+
+        test.subscribe(val => this.refreshToken(val));
+    }
+
+    refreshToken(data) {
+        alert(`${data} BAM !`);
     }
 
     private handleError(error: Response) {
