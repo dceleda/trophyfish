@@ -7,6 +7,8 @@ import { AddFishComponent } from "./Components/add-fish/add-fish.component";
 import { LoginComponent } from "./Components/login/login.component";
 import { PageNotFoundComponent } from "./Components/page-not-found/page-not-found.component";
 
+import {AuthGuard} from "./Services/auth.guard"
+
 const appRoutes: Routes = [
     {
         path: "",
@@ -26,7 +28,8 @@ const appRoutes: Routes = [
     },
     {
         path: "zglosokaz",
-        component: AddFishComponent
+        component: AddFishComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: '**',

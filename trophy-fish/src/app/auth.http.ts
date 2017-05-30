@@ -1,32 +1,35 @@
-import {Injectable } from "@angular/core";
-import { Http, Headers } from "@angular/http";
+import { Injectable } from "@angular/core";
+import { Http, Headers, Response } from "@angular/http";
+import { Router } from '@angular/router';
+
+import { Observable } from "rxjs/Observable";
 
 import { environment } from '../environments/environment';
 
 @Injectable()
 export class AuthHttp {
 
-    constructor(private http: Http) {
+    constructor(private http: Http, private router: Router) {
     }
 
     get(url, opts = {}) {
         this.configureAuth(opts);
-        return this.http.get(url, opts);
+        return this.http.get(url, opts).catch(this.handleError());
     }
 
     post(url, data, opts = {}) {
         this.configureAuth(opts);
-        return this.http.post(url, data, opts);
+        return this.http.post(url, data, opts).catch(this.handleError());
     }
 
     put(url, data, opts = {}) {
         this.configureAuth(opts);
-        return this.http.put(url, data, opts);
+        return this.http.put(url, data, opts).catch(this.handleError());
     }
 
     delete(url, opts = {}) {
         this.configureAuth(opts);
-        return this.http.delete(url, opts);
+        return this.http.delete(url, opts).catch(this.handleError());
     }
 
     configureAuth(opts: any) {
@@ -42,5 +45,16 @@ export class AuthHttp {
                 opts.headers.set("Authorization", `Bearer ${auth.access_token}`);
             }
         }
+    }
+
+    private handleError() {
+        return (response: Response) => {
+            if (response.status === 401) {
+                // console.log("401 !!!");
+                this.router.navigate(['login']);
+            }
+
+            return Observable.throw(response);
+        };
     }
 }

@@ -20,6 +20,7 @@ import { AuthHttp } from "./auth.http";
 
 import { AuthService } from "./Services/auth.service";
 import { FishService } from "./Services/fish.service";
+import { AuthGuard } from "./Services/auth.guard";
 
 
 @NgModule({
@@ -41,7 +42,7 @@ import { FishService } from "./Services/fish.service";
     AppRouting,
     ReactiveFormsModule
   ],
-  providers: [AuthHttp, AuthService, FishService],
+  providers: [AuthHttp, AuthService, FishService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
