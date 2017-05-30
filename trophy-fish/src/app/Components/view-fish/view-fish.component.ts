@@ -54,4 +54,13 @@ export class ViewFishComponent implements OnInit {
     );
   }
 
+  getTest() {
+    this.fishService.getTest().subscribe(data => {
+      console.log(data);
+      // this.router.navigate(["item/view", this.item.Id]);
+    },
+      error => console.log(error)
+    );
+  }
+
 }

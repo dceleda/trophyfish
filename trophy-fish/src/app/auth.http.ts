@@ -1,13 +1,12 @@
 import {Injectable } from "@angular/core";
 import { Http, Headers } from "@angular/http";
 
+import { environment } from '../environments/environment';
+
 @Injectable()
 export class AuthHttp {
-    //http = null;
-    authKey = "auth";
 
     constructor(private http: Http) {
-        //this.http = http;
     }
 
     get(url, opts = {}) {
@@ -31,7 +30,7 @@ export class AuthHttp {
     }
 
     configureAuth(opts: any) {
-        var i = localStorage.getItem(this.authKey);
+        var i = localStorage.getItem(environment.authKey);
         if (i != null) {
             var auth = JSON.parse(i);
             console.log(auth);

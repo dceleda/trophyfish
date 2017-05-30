@@ -24,6 +24,14 @@ namespace TrophyFish.Api.Controllers
 
         }
 
+        [HttpGet("GetTest")]
+        [Authorize]
+        public IActionResult GetTest(int id)
+        {
+
+            return new JsonResult(new FishVM { Id = 10, Length = "55" }, _defaultJsonSettings);
+
+        }
         [HttpPost()]
         //[Authorize]
         public IActionResult Add([FromBody]FishVM vm)

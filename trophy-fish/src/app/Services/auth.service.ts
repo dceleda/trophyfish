@@ -4,6 +4,8 @@ import { Observable } from "rxjs/Observable";
 
 import { AuthHttp } from "../auth.http";
 
+import { environment } from '../../environments/environment';
+
 @Injectable()
 export class AuthService {
     authKey = "auth";
@@ -12,7 +14,7 @@ export class AuthService {
     }
 
     login(username: string, password: string): any {
-        var url = "http://localhost:21495/connect/token";
+        var url = environment.apiURL + "/connect/token";
 
         var data = {
             username: username,
@@ -40,14 +42,14 @@ export class AuthService {
     }
 
     logout(): boolean {
-        var url = "http://localhost:21495/connect/logoff";
+        var url = environment.apiURL + "/connect/logoff";
 
 
         this.http.post(url, null,  new RequestOptions({
                 headers: new Headers({
                     "Content-Type": "application/x-www-form-urlencoded"
                 })}))
-            .catch(this.handleError)
+            .catch(err => { return this.handleError(err) })
             .subscribe();
 
         this.setAuth(null);
@@ -105,6 +107,6 @@ export class AuthService {
 
     private handleError(error: Response) {
         console.error(error);
-        return Observable.throw(error.json().error || "Server error");
+        return Observable.throw(error || "Server error");
     }
 }

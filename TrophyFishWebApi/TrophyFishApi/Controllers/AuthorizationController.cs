@@ -153,6 +153,7 @@ namespace TrophyFish.Api.Controllers
         }
 
         [HttpPost("~/connect/logoff"), Produces("application/json")]
+        [Authorize]
         public async Task<IActionResult> Logoff(OpenIdConnectRequest request)
         {
 

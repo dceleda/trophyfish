@@ -3,15 +3,15 @@ import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 
 import { AuthHttp } from "../auth.http";
-
 import { Fish } from "../Model/Fish"
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class FishService {
 
   authKey = "auth";
 
-  private baseUrl = "http://localhost:21495/api/fish/";
+  private baseUrl = environment.apiURL + "/api/fish/";
 
   constructor(private http: AuthHttp) { }
 
@@ -25,12 +25,19 @@ export class FishService {
     return this.http.get(url).map(resp => <Fish>resp.json()).catch(err => { return this.handleError(err) });
   }
 
+  getTest(): Observable<any> {
+
+    var url = this.baseUrl + "GetTest";
+
+    return this.http.get(url).catch(err => { return this.handleError(err) });
+  }
+
   add(fish: Fish) {
     var url = this.baseUrl;
 
     return this.http.post(url, JSON.stringify(fish), this.getRequestOptions())
       .map(response => response.json())
-      .catch(this.handleError);
+      .catch(err => { return this.handleError(err) });
   }
 
   // Persist auth into localStorage or removes it if a NULL argument is given
@@ -54,6 +61,6 @@ export class FishService {
 
   private handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error.json().error || "Server error");
+    return Observable.throw(error || "Server error");
   }
 }
