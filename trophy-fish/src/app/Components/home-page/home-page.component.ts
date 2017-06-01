@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 
 import { Observable, Observer } from "rxjs/Rx";
-// import 'rxjs/add/operator/delay';
+// import 'rxjs/add/operator/of';
 
 
 @Component({
@@ -12,20 +12,27 @@ import { Observable, Observer } from "rxjs/Rx";
 })
 export class HomePageComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  private emitter:Observer<boolean>; 
 
   ngOnInit() {
   }
 
-  onClick() {
-    this.delayRefresh();
+  onRxClick() {
+    this.delayRefresh(3000);
   }
 
-  private delayRefresh() {
+  onRx2Click() {
+    if(this.emitter != null)
+    {
+      this.emitter.next(true);
+    }
+  }
 
-    let test = Observable.timer(1000);
+  private delayRefresh(interval:number) {
 
-    test.subscribe(val => alert("aaa"));
+    let test = Observable.timer(interval);
+
+    test.takeUntil(Observable.create(e => this.emitter = e)).subscribe(val => this.testMet());
 
 
 
@@ -41,5 +48,9 @@ export class HomePageComponent implements OnInit {
     //output: 'Hello'...'World!'...'Goodbye'...'World!'
     const subscribe = message.subscribe(val => console.log(val));
 
+  }
+
+  private testMet() {
+    alert("aaa");
   }
 }

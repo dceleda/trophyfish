@@ -20,7 +20,7 @@ export class TopNavBarComponent implements OnInit {
   }
 
   logout(): boolean {
-    if (this.authService.logout()) {
+    if (this.authService.postLogout()) {
       this.router.navigate([""]);
     }
 

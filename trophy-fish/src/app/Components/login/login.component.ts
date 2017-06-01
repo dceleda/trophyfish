@@ -31,7 +31,7 @@ export class LoginComponent {
         e.preventDefault();
         var username = this.loginForm.value.username;
         var password = this.loginForm.value.password;
-        this.authService.login(username, password)
+        this.authService.postLogin(username, password)
             .subscribe((data) => {
                 // login successful
                 this.loginError = false;

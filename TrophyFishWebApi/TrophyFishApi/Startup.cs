@@ -103,8 +103,8 @@ namespace TrophyFish.Api
                 options.AllowPasswordFlow();
                 options.AllowRefreshTokenFlow();
 
-                options.SetAccessTokenLifetime(new TimeSpan(0, 2, 0));
-                options.SetRefreshTokenLifetime(new TimeSpan(0, 10, 0));
+                options.SetAccessTokenLifetime(new TimeSpan(0, 1, 0));
+                options.SetRefreshTokenLifetime(new TimeSpan(0, 3, 0));
 
                 // During development, you can disable the HTTPS requirement.
                 options.DisableHttpsRequirement();

@@ -2,9 +2,9 @@ import { Injectable, EventEmitter } from "@angular/core";
 import { Http, Headers, Response, RequestOptions } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 
-import { AuthHttp } from "../auth.http";
-
 import { environment } from '../../environments/environment';
+import { AuthHttp } from "../auth.http";
+import { Token } from "../Model/Token";
 
 @Injectable()
 export class AuthService {
@@ -12,7 +12,7 @@ export class AuthService {
     constructor(private http: AuthHttp) {
     }
 
-    login(username: string, password: string): any {
+    postLogin(username: string, password: string): any {
         var url = environment.apiURL + "/connect/token";
 
         var data = {
@@ -32,19 +32,55 @@ export class AuthService {
                 })
             }))
             .map(response => {
-                var auth = response.json();
+                let auth: Token = response.json();
                 console.log("The following auth JSON object has been received:");
                 console.log(auth);
+
                 this.http.setAuth(auth);
+                this.delayRefresh(auth.expires_in);
+
+
                 return auth;
             });
-
-        this.delayRefresh();
 
         return result;
     }
 
-    logout(): boolean {
+    postRefreshToken() {
+        var url = environment.apiURL + "/connect/token";
+
+        let token = this.http.getTokenFromStorage();
+
+        if (token != null) {
+            var data = {
+                grant_type: "refresh_token",
+                scope: "offline_access",
+                refresh_token: token.refresh_token
+            };
+
+            this.http.post(
+                url,
+                this.toUrlEncodedString(data),
+                new RequestOptions({
+                    headers: new Headers({
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    })
+                }))
+                .map(response => {
+                    let auth: Token = response.json();
+                    console.log("The following auth JSON object has been received:");
+                    console.log(auth);
+
+                    this.http.setAuth(auth);
+                    this.delayRefresh(auth.expires_in);
+
+
+                    return auth;
+                }).subscribe();
+        }
+    }
+
+    postLogout(): boolean {
         var url = environment.apiURL + "/connect/logoff";
 
 
@@ -76,16 +112,7 @@ export class AuthService {
 
 
 
-    // Retrieves the auth JSON object (or NULL if none)
-    getAuth(): any {
-        var i = localStorage.getItem(environment.authKey);
-        if (i) {
-            return JSON.parse(i);
-        }
-        else {
-            return null;
-        }
-    }
+
 
     // Returns TRUE if the user is logged in, FALSE otherwise.
     isLoggedIn(): boolean {
@@ -100,14 +127,14 @@ export class AuthService {
         });
     }
 
-    private delayRefresh() {
-        let test = Observable.timer(7000);
+    private delayRefresh(expiresIn: number) {
+        let test1 = Observable.timer(5000);
+        test1.subscribe(val => alert("aaa"));
 
-        test.subscribe(val => this.refreshToken(val));
-    }
+        let milisec = expiresIn / 2 * 1000;
+        let test = Observable.timer(milisec);
 
-    refreshToken(data) {
-        alert(`${data} BAM !`);
+        test.subscribe(val => this.postRefreshToken());
     }
 
     private handleError(error: Response) {

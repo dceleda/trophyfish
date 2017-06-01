@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Observable } from "rxjs/Observable";
 
 import { environment } from '../environments/environment';
+import { Token } from "./Model/Token";
 
 @Injectable()
 export class AuthHttp {
@@ -48,7 +49,7 @@ export class AuthHttp {
     }
 
     // Persist auth into localStorage or removes it if a NULL argument is given
-    public setAuth(auth: any): boolean {
+    public setAuth(auth: Token): boolean {
         if (auth) {
             localStorage.setItem(environment.authKey, JSON.stringify(auth));
         }
@@ -58,11 +59,29 @@ export class AuthHttp {
         return true;
     }
 
+    // Retrieves the auth JSON object (or NULL if none)
+    getTokenFromStorage(): Token {
+        var item = localStorage.getItem(environment.authKey);
+        if (item) {
+            return JSON.parse(item);
+        }
+        else {
+            return null;
+        }
+    }
+
     private handleError() {
         return (response: Response) => {
             if (response.status === 401) {
-                this.setAuth(null);
-                this.router.navigate(['login']);
+                if(localStorage.getItem(environment.authKey) != null)
+                {
+                    //TODO: check token not expired -> login
+                    this.router.navigate(['notauthorized']);
+                }
+                else
+                {
+                    this.router.navigate(['login']);
+                }
             }
 
             return Observable.throw(response);

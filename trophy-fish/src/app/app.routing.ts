@@ -5,6 +5,7 @@ import { HomePageComponent } from "./Components/home-page/home-page.component";
 import { ViewFishComponent } from "./Components/view-fish/view-fish.component";
 import { AddFishComponent } from "./Components/add-fish/add-fish.component";
 import { LoginComponent } from "./Components/login/login.component";
+import { NotAuthorizedComponent } from "./Components/not-authorized/not-authorized.component";
 import { PageNotFoundComponent } from "./Components/page-not-found/page-not-found.component";
 
 import {AuthGuard} from "./Services/auth.guard"
@@ -30,6 +31,10 @@ const appRoutes: Routes = [
         path: "zglosokaz",
         component: AddFishComponent,
         canActivate: [AuthGuard]
+    },
+    {
+        path: "notauthorized",
+        component: NotAuthorizedComponent
     },
     {
         path: '**',

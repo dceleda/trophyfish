@@ -35,6 +35,7 @@ import { AuthHttp } from "./auth.http";
 import { AuthService } from "./Services/auth.service";
 import { FishService } from "./Services/fish.service";
 import { AuthGuard } from "./Services/auth.guard";
+import { NotAuthorizedComponent } from './Components/not-authorized/not-authorized.component';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { AuthGuard } from "./Services/auth.guard";
     LoginComponent,
     PageNotFoundComponent,
     HomePageComponent,
-    ViewFishComponent
+    ViewFishComponent,
+    NotAuthorizedComponent
   ],
   imports: [
     BsDropdownModule.forRoot(),
