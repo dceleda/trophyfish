@@ -5,4 +5,6 @@ export interface Token {
     refresh_token:string;
     resource:string;
     token_type:string;
+
+    expiringDate: Date;
 }

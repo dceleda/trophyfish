@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Http, Headers, Response } from "@angular/http";
+import { Http, Headers, Response, RequestOptionsArgs , RequestMethod} from "@angular/http";
 import { Router } from '@angular/router';
 
 import { Observable } from "rxjs/Observable";
@@ -13,27 +13,64 @@ export class AuthHttp {
     constructor(private http: Http, private router: Router) {
     }
 
-    get(url, opts = {}) {
+    get(url, opts:RequestOptionsArgs = {}) {
         this.configureAuth(opts);
-        return this.http.get(url, opts).catch(this.handleError());
+        opts.method = RequestMethod.Get;
+
+        return this.request(url, opts);
     }
 
-    post(url, data, opts = {}) {
+    post(url, data, opts:RequestOptionsArgs = {}) {
         this.configureAuth(opts);
-        return this.http.post(url, data, opts).catch(this.handleError());
+        opts.method = RequestMethod.Post;
+        opts.body = data;
+
+        return this.request(url, opts);
     }
 
-    put(url, data, opts = {}) {
+    put(url, data, opts:RequestOptionsArgs = {}) {
         this.configureAuth(opts);
-        return this.http.put(url, data, opts).catch(this.handleError());
+        opts.method = RequestMethod.Put;
+        opts.body = data;
+
+        return this.request(url, opts);
     }
 
-    delete(url, opts = {}) {
+    delete(url, opts:RequestOptionsArgs = {}) {
         this.configureAuth(opts);
-        return this.http.delete(url, opts).catch(this.handleError());
+        opts.method = RequestMethod.Delete;
+
+        return this.request(url, opts);
     }
 
-    configureAuth(opts: any) {
+ // Persist auth into localStorage or removes it if a NULL argument is given
+    public setAuth(auth: Token): boolean {
+        if (auth) {
+            localStorage.setItem(environment.authKey, JSON.stringify(auth));
+        }
+        else {
+            localStorage.removeItem(environment.authKey);
+        }
+        return true;
+    }
+
+    // Retrieves the auth JSON object (or NULL if none)
+    public getTokenFromStorage(): Token {
+        var item = localStorage.getItem(environment.authKey);
+        if (item) {
+            return JSON.parse(item);
+        }
+        else {
+            return null;
+        }
+    }
+
+    private request(url, opts:RequestOptionsArgs = {})
+    {
+        return this.http.request(url, opts).catch(this.handleError());
+    }
+
+    private configureAuth(opts:RequestOptionsArgs) {
         var i = localStorage.getItem(environment.authKey);
         if (i != null) {
             var auth = JSON.parse(i);
@@ -48,38 +85,21 @@ export class AuthHttp {
         }
     }
 
-    // Persist auth into localStorage or removes it if a NULL argument is given
-    public setAuth(auth: Token): boolean {
-        if (auth) {
-            localStorage.setItem(environment.authKey, JSON.stringify(auth));
-        }
-        else {
-            localStorage.removeItem(environment.authKey);
-        }
-        return true;
-    }
-
-    // Retrieves the auth JSON object (or NULL if none)
-    getTokenFromStorage(): Token {
-        var item = localStorage.getItem(environment.authKey);
-        if (item) {
-            return JSON.parse(item);
-        }
-        else {
-            return null;
-        }
-    }
-
     private handleError() {
         return (response: Response) => {
             if (response.status === 401) {
-                if(localStorage.getItem(environment.authKey) != null)
-                {
-                    //TODO: check token not expired -> login
-                    this.router.navigate(['notauthorized']);
+                let token = this.getTokenFromStorage();
+
+                if (token != null) {
+                    if (token.expiringDate < new Date()) {
+                        // this.authService.postRefreshToken();
+                        response.statusText = "Refresh Token";
+                    }
+                    else {
+                        this.router.navigate(['notauthorized']);
+                    }
                 }
-                else
-                {
+                else {
                     this.router.navigate(['login']);
                 }
             }

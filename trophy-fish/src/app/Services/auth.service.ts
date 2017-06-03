@@ -32,15 +32,7 @@ export class AuthService {
                 })
             }))
             .map(response => {
-                let auth: Token = response.json();
-                console.log("The following auth JSON object has been received:");
-                console.log(auth);
-
-                this.http.setAuth(auth);
-                this.delayRefresh(auth.expires_in);
-
-
-                return auth;
+                return this.mapTokenResponse(response);
             });
 
         return result;
@@ -67,15 +59,7 @@ export class AuthService {
                     })
                 }))
                 .map(response => {
-                    let auth: Token = response.json();
-                    console.log("The following auth JSON object has been received:");
-                    console.log(auth);
-
-                    this.http.setAuth(auth);
-                    this.delayRefresh(auth.expires_in);
-
-
-                    return auth;
+                    return this.mapTokenResponse(response);
                 }).subscribe();
         }
     }
@@ -110,13 +94,22 @@ export class AuthService {
         return body;
     }
 
-
-
-
-
     // Returns TRUE if the user is logged in, FALSE otherwise.
     isLoggedIn(): boolean {
         return localStorage.getItem(environment.authKey) != null;
+    }
+
+
+    private mapTokenResponse(resp: Response): Token {
+        let authToken: Token = resp.json();
+        authToken.expiringDate = new Date(new Date().getTime() + authToken.expires_in * 1000);
+
+        console.log(authToken);
+
+        this.http.setAuth(authToken);
+        // this.delayRefresh(authToken.expires_in);
+
+        return authToken;
     }
 
     private getRequestOptions() {
