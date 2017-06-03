@@ -43,7 +43,7 @@ export class AuthHttp {
         return this.request(url, opts);
     }
 
- // Persist auth into localStorage or removes it if a NULL argument is given
+    // Persist auth into localStorage or removes it if a NULL argument is given
     public setAuth(auth: Token): boolean {
         if (auth) {
             localStorage.setItem(environment.authKey, JSON.stringify(auth));

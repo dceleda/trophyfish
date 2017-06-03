@@ -59,6 +59,14 @@ export class FishService {
 
   private handleError(error: Response) {
     console.error(error);
+
+    if (error.status === 401 && error.statusText === "Refresh Token") {
+      let token = this.http.getTokenFromStorage();
+
+      // this.authService.postRefreshToken();
+
+    }
+
     return Observable.throw(error || "Server error");
   }
 }
