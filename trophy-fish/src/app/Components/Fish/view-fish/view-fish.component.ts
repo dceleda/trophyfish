@@ -1,10 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
-import { Fish } from "../../Model/Fish";
+import { Fish } from "../../../Model/Fish";
 
-import { FishService } from "../../Services/fish.service";
-import { AuthService } from "../../Services/auth.service";
+import { FishService } from "../../../Services/fish.service";
+import { AuthService } from "../../../Services/auth.service";
 
 @Component({
   selector: 'app-view-fish',

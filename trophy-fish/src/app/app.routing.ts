@@ -1,12 +1,12 @@
 import { ModuleWithProviders} from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 
-import { HomePageComponent } from "./Components/home-page/home-page.component";
-import { ViewFishComponent } from "./Components/view-fish/view-fish.component";
-import { AddFishComponent } from "./Components/add-fish/add-fish.component";
-import { LoginComponent } from "./Components/login/login.component";
-import { NotAuthorizedComponent } from "./Components/not-authorized/not-authorized.component";
-import { PageNotFoundComponent } from "./Components/page-not-found/page-not-found.component";
+import { HomePageComponent } from "./Components/General/home-page/home-page.component";
+import { ViewFishComponent } from "./Components/Fish/view-fish/view-fish.component";
+import { AddFishComponent } from "./Components/Fish/add-fish/add-fish.component";
+import { LoginComponent } from "./Components/Account/login/login.component";
+import { NotAuthorizedComponent } from "./Components/General/not-authorized/not-authorized.component";
+import { PageNotFoundComponent } from "./Components/General/page-not-found/page-not-found.component";
 
 import {AuthGuard} from "./Services/auth.guard"
 

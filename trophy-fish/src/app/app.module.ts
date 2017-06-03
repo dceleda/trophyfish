@@ -22,19 +22,19 @@ import "rxjs/Rx";
 import "jwt-decode";
 
 import { AppComponent } from './app.component';
-import { TopNavBarComponent } from './Components/top-nav-bar/top-nav-bar.component';
-import { AddFishComponent } from './Components/add-fish/add-fish.component';
-import { LoginComponent } from './Components/login/login.component';
-import { PageNotFoundComponent } from './Components/page-not-found/page-not-found.component';
-import { HomePageComponent } from './Components/home-page/home-page.component';
-import { ViewFishComponent } from './Components/view-fish/view-fish.component';
+import { TopNavBarComponent } from './Components/General/top-nav-bar/top-nav-bar.component';
+import { AddFishComponent } from './Components/Fish/add-fish/add-fish.component';
+import { LoginComponent } from './Components/Account/login/login.component';
+import { PageNotFoundComponent } from './Components/General/page-not-found/page-not-found.component';
+import { HomePageComponent } from './Components/General/home-page/home-page.component';
+import { ViewFishComponent } from './Components/Fish/view-fish/view-fish.component';
 
 import { AppRouting } from "./app.routing";
 
 import { AuthService } from "./Services/auth.service";
 import { FishService } from "./Services/fish.service";
 import { AuthGuard } from "./Services/auth.guard";
-import { NotAuthorizedComponent } from './Components/not-authorized/not-authorized.component';
+import { NotAuthorizedComponent } from './Components/General/not-authorized/not-authorized.component';
 
 
 @NgModule({
