@@ -30,7 +30,6 @@ import { HomePageComponent } from './Components/home-page/home-page.component';
 import { ViewFishComponent } from './Components/view-fish/view-fish.component';
 
 import { AppRouting } from "./app.routing";
-import { AuthHttp } from "./auth.http";
 
 import { AuthService } from "./Services/auth.service";
 import { FishService } from "./Services/fish.service";
@@ -58,7 +57,7 @@ import { NotAuthorizedComponent } from './Components/not-authorized/not-authoriz
     AppRouting,
     ReactiveFormsModule
   ],
-  providers: [AuthHttp, AuthService, FishService, AuthGuard],
+  providers: [AuthService, FishService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

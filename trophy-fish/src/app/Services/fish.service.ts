@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 
-import { AuthHttp } from "../auth.http";
+import { AuthService } from "./auth.service";
 import { Fish } from "../Model/Fish"
 import { environment } from '../../environments/environment';
 
@@ -11,7 +11,7 @@ export class FishService {
 
   private baseUrl = environment.apiURL + "/api/fish/";
 
-  constructor(private http: AuthHttp) { }
+  constructor(private authService: AuthService) { }
 
   get(id: number): Observable<any> {
     if (id == null) {
@@ -20,20 +20,20 @@ export class FishService {
 
     var url = this.baseUrl + id;
 
-    return this.http.get(url).map(resp => <Fish>resp.json()).catch(err => { return this.handleError(err) });
+    return this.authService.get(url).map(resp => <Fish>resp.json()).catch(err => { return this.handleError(err) });
   }
 
   getTest(): Observable<any> {
 
     var url = this.baseUrl + "GetTest";
 
-    return this.http.get(url).catch(err => { return this.handleError(err) });
+    return this.authService.get(url).catch(err => { return this.handleError(err) });
   }
 
   add(fish: Fish) {
     var url = this.baseUrl;
 
-    return this.http.post(url, JSON.stringify(fish), this.getRequestOptions())
+    return this.authService.post(url, JSON.stringify(fish), this.getRequestOptions())
       .map(response => response.json())
       .catch(err => { return this.handleError(err) });
   }
@@ -49,7 +49,7 @@ export class FishService {
     return true;
   }
 
-  private getRequestOptions() {
+  private getRequestOptions():RequestOptions {
     return new RequestOptions({
       headers: new Headers({
         "Content-Type": "application/json"
@@ -59,13 +59,6 @@ export class FishService {
 
   private handleError(error: Response) {
     console.error(error);
-
-    if (error.status === 401 && error.statusText === "Refresh Token") {
-      let token = this.http.getTokenFromStorage();
-
-      // this.authService.postRefreshToken();
-
-    }
 
     return Observable.throw(error || "Server error");
   }

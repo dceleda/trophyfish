@@ -1,18 +1,19 @@
 import { Injectable, EventEmitter } from "@angular/core";
-import { Http, Headers, Response, RequestOptions } from "@angular/http";
+import { Http, Headers, Response, RequestOptions, RequestMethod } from "@angular/http";
+import { Router } from '@angular/router';
+
 import { Observable } from "rxjs/Observable";
 
 import { environment } from '../../environments/environment';
-import { AuthHttp } from "../auth.http";
 import { Token } from "../Model/Token";
 
 @Injectable()
 export class AuthService {
 
-    constructor(private http: AuthHttp) {
+    constructor(private http: Http, private router: Router) {
     }
 
-    postLogin(username: string, password: string): any {
+    postLogin(username: string, password: string): Observable<Token> {
         var url = environment.apiURL + "/connect/token";
 
         var data = {
@@ -23,7 +24,7 @@ export class AuthService {
             scope: "offline_access openid roles"
         };
 
-        var result = this.http.post(
+        let result = this.http.post(
             url,
             this.toUrlEncodedString(data),
             new RequestOptions({
@@ -38,10 +39,10 @@ export class AuthService {
         return result;
     }
 
-    postRefreshToken() {
+    postRefreshToken(): Observable<Token> {
         var url = environment.apiURL + "/connect/token";
 
-        let token = this.http.getTokenFromStorage();
+        let token = this.getTokenFromStorage();
 
         if (token != null) {
             var data = {
@@ -50,7 +51,7 @@ export class AuthService {
                 refresh_token: token.refresh_token
             };
 
-            this.http.post(
+            return this.http.post(
                 url,
                 this.toUrlEncodedString(data),
                 new RequestOptions({
@@ -60,29 +61,64 @@ export class AuthService {
                 }))
                 .map(response => {
                     return this.mapTokenResponse(response);
-                }).subscribe();
+                });
         }
+
+        return Observable.throw("No refresh token in the store !");
     }
 
     postLogout(): boolean {
         var url = environment.apiURL + "/connect/logoff";
-
-
-        this.http.post(url, null, new RequestOptions({
+        let opts = new RequestOptions({
             headers: new Headers({
                 "Content-Type": "application/x-www-form-urlencoded"
             })
-        }))
-            .catch(err => { return this.handleError(err) })
+        });
+
+        this.configureAuth(opts);
+
+        this.http.post(url, null, )
+            .catch(err => this.handleError(err))
             .subscribe();
 
-        this.http.setAuth(null);
+        this.setAuth(null);
 
         return true;
     }
 
+    get(url, opts: RequestOptions = new RequestOptions()) {
+        opts.method = RequestMethod.Get;
+
+        return this.request(url, opts);
+    }
+
+    post(url, data, opts: RequestOptions) {
+        opts.method = RequestMethod.Post;
+        opts.body = data;
+
+        return this.request(url, opts);
+    }
+
+    put(url, data, opts: RequestOptions) {
+        opts.method = RequestMethod.Put;
+        opts.body = data;
+
+        return this.request(url, opts);
+    }
+
+    delete(url, opts: RequestOptions) {
+        opts.method = RequestMethod.Delete;
+
+        return this.request(url, opts);
+    }
+
+    private request(url, opts: RequestOptions) {
+        this.configureAuth(opts);
+        return this.http.request(url, opts).catch(err => this.checkTokenExpiration(url, err, opts));
+    }
+
     // Converts a Json object to urlencoded format
-    toUrlEncodedString(data: any) {
+    private toUrlEncodedString(data: any) {
         var body = "";
         for (var key in data) {
             if (body.length) {
@@ -99,6 +135,32 @@ export class AuthService {
         return localStorage.getItem(environment.authKey) != null;
     }
 
+    // Persist auth into localStorage or removes it if a NULL argument is given
+    private setAuth(auth: Token): boolean {
+        if (auth) {
+            localStorage.setItem(environment.authKey, JSON.stringify(auth));
+        }
+        else {
+            localStorage.removeItem(environment.authKey);
+        }
+        return true;
+    }
+
+
+    private configureAuth(opts: RequestOptions) {
+        var i = localStorage.getItem(environment.authKey);
+        if (i != null) {
+            var auth = JSON.parse(i);
+            console.log(auth);
+            if (auth.access_token != null) {
+                if (opts.headers == null) {
+                    opts.headers = new Headers();
+                }
+
+                opts.headers.set("Authorization", `Bearer ${auth.access_token}`);
+            }
+        }
+    }
 
     private mapTokenResponse(resp: Response): Token {
         let authToken: Token = resp.json();
@@ -106,8 +168,7 @@ export class AuthService {
 
         console.log(authToken);
 
-        this.http.setAuth(authToken);
-        // this.delayRefresh(authToken.expires_in);
+        this.setAuth(authToken);
 
         return authToken;
     }
@@ -120,18 +181,55 @@ export class AuthService {
         });
     }
 
-    private delayRefresh(expiresIn: number) {
-        let test1 = Observable.timer(5000);
-        test1.subscribe(val => alert("aaa"));
+    // Retrieves the auth JSON object (or NULL if none)
+    public getTokenFromStorage(): Token {
+        var item = localStorage.getItem(environment.authKey);
+        if (item) {
+            let token: Token = JSON.parse(item);
+            token.expiringDate = new Date(token.expiringDate);
 
-        let milisec = expiresIn / 2 * 1000;
-        let test = Observable.timer(milisec);
-
-        test.subscribe(val => this.postRefreshToken());
+            return token;
+        }
+        else {
+            return null;
+        }
     }
 
-    private handleError(error: Response) {
-        console.error(error);
-        return Observable.throw(error || "Server error");
+    private checkTokenExpiration(url, response: Response, opts: RequestOptions) {
+        if (response.status === 401) {
+            let token = this.getTokenFromStorage();
+
+            if (token != null) {
+                if (token.expiringDate < new Date()) {
+                    return this.postRefreshToken().flatMap(token => {
+                        this.configureAuth(opts);
+                        return this.http.request(url, opts).catch(err => this.handleError(err));
+                    })
+                        .catch(err => this.handleError(err));
+                }
+            }
+        }
+
+        return this.handleError(response);
+    }
+
+    private handleError(error: any) {
+        if (error.status === 401) {
+            let token = this.getTokenFromStorage();
+
+            if (token != null) {
+
+                this.router.navigate(['notauthorized']);
+            }
+            else {
+                this.router.navigate(['login']);
+            }
+        }
+        else if (error.status === 400) {
+            this.setAuth(null);
+            this.router.navigate(['login']);
+        }
+
+        return Observable.throw(error);
     }
 }
